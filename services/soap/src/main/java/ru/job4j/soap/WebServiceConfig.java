@@ -12,12 +12,18 @@ import ru.job4j.soap.service.StudentsImpl;
 @Configuration
 public class WebServiceConfig {
 
+    private final Bus bus;
+    private final StudentsImpl studentsImpl;
+
     @Autowired
-    private Bus bus;
+    public WebServiceConfig(Bus bus, StudentsImpl studentsImpl) {
+        this.bus = bus;
+        this.studentsImpl = studentsImpl;
+    }
 
     @Bean
     public Endpoint endpoint() {
-        EndpointImpl endpoint = new EndpointImpl(bus, new StudentsImpl());
+        EndpointImpl endpoint = new EndpointImpl(bus, studentsImpl);
         endpoint.publish("/Students");
         return endpoint;
     }
