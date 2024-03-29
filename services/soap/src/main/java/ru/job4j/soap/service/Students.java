@@ -6,7 +6,7 @@ import jakarta.jws.WebResult;
 import jakarta.jws.WebService;
 import jakarta.xml.ws.RequestWrapper;
 import jakarta.xml.ws.ResponseWrapper;
-import ru.job4j.soap.model.Student;
+import ru.job4j.soap.dto.StudentDTO;
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ public interface Students {
     @ResponseWrapper(localName = "StudentsResponse",
             targetNamespace = "http://",
             className = "ru.job4j.soap.service.StudentsResponse")
-    List<Student> getAllStudents(@WebParam(name = "sort", targetNamespace = "") String sort);
+    List<StudentDTO> getAllStudents(@WebParam(name = "sort", targetNamespace = "") String sort);
 
     @WebResult(name = "student", targetNamespace = "")
     @RequestWrapper(localName = "StudentOneRequest",
@@ -31,5 +31,5 @@ public interface Students {
     @ResponseWrapper(localName = "StudentOneResponse",
             targetNamespace = "http://",
             className = "ru.job4j.soap.service.StudentOneResponse")
-    Student getOneStudent(@WebParam(name = "number", targetNamespace = "") Integer number);
+    StudentDTO getOneStudent(@WebParam(name = "number", targetNamespace = "") Integer number);
 }

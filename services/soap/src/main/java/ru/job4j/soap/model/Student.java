@@ -25,4 +25,6 @@ public class Student {
     private String firstName;
     @Column(name = "middle_name")
     private String middleName;
+    @Column(name = "photo_title")
+    private String photoTitle;
 }

@@ -1,4 +1,4 @@
-package ru.job4j.soap;
+package ru.job4j.soap.configuration;
 
 import jakarta.xml.ws.Endpoint;
 import org.apache.cxf.Bus;
