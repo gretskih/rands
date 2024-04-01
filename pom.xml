@@ -11,6 +11,7 @@
     <modules>
         <module>services/soap</module>
         <module>services/rest</module>
+        <module>services/eureka</module>
     </modules>
 
     <properties>
