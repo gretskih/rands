@@ -1,5 +1,6 @@
 package ru.job4j.soapxml.configuration;
 
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import io.minio.MinioClient;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.modelmapper.ModelMapper;
@@ -37,10 +38,23 @@ public class ConfigurationClass {
     }
 
     @Bean
-    public NewTopic kRequests() {
-        return TopicBuilder.name("kRequests")
-                .partitions(1)
+    public NewTopic oneRequests() {
+        return TopicBuilder.name("oneRequests")
+                .partitions(10)
                 .replicas(1)
                 .build();
+    }
+
+    @Bean
+    public NewTopic allRequests() {
+        return TopicBuilder.name("allRequests")
+                .partitions(10)
+                .replicas(1)
+                .build();
+    }
+
+    @Bean
+    public XmlMapper xmlMapper() {
+        return new XmlMapper();
     }
 }

@@ -1,11 +1,11 @@
 package ru.job4j.restxml.service;
 
-import ru.job4j.restxml.dto.StudentDTO;
+import ru.job4j.restxml.dto.Student;
 
 import java.util.List;
 
 public interface StudentService {
-    StudentDTO findOneStudent(Integer number);
+    Student findOneStudent(Integer number);
 
-    List<StudentDTO> findAllStudents(String sortDirection);
+    List<Student> findAllStudents(String sortDirection);
 }
