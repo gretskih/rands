@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <Appenders>
+        <!-- CONSOLE APPENDER -->
+        <Console name="Console">
+            <PatternLayout pattern="%style{%d{ISO8601}}{black} %highlight{%-5level }[%style{%t}{bright,blue}] %style{%C{1.}}{bright,yellow}: %msg%n%throwable" />
+        </Console>
+        <!-- FILE APPENDER -->
+        <File name="File" fileName="logs/rest/File.log">
+            <PatternLayout pattern="%d %p %c{2} %m %n" />
+        </File>
+        <!-- ROLLING FILE APPENDER -->
+        <RollingFile name = "RollingFile"
+                     fileName = "logs/rest/RollingFile.log"
+                     filePattern = "logs/$${date:MM-yyyy}/RollingFile_%d{dd.MM.yyyy}_%i.log">
+            <!-- PATTERN LAYOUT -->
+            <PatternLayout pattern="%d %p %C{1.} [%t] %m%n"/>
+            <!-- ROLLOVER POLICY (on startup, daily and when the file reaches 10MB) -->
+            <Policies>
+                <OnStartupTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="10 MB" />
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <!-- LOGGER -->
+        <Logger name="ru.job4j.restxml" level="info">
+            <AppenderRef ref="Console" />
+            <AppenderRef ref="File" />
+            <AppenderRef ref="RollingFile"/>
+        </Logger>
+        <!-- PREVENT DEFAULT LOGGER (since no appenders are defined) -->
+        <Root level="info">
+            <AppenderRef ref="Console" />
+        </Root>
+    </Loggers>
+</Configuration>

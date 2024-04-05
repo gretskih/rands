@@ -1,5 +1,5 @@
 
-package ru.job4j.restxml.dto;
+package ru.job4j.restxml.domain;
 
 import lombok.*;
 

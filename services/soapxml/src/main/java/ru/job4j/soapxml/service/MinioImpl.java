@@ -6,6 +6,7 @@ import org.apache.commons.compress.utils.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import ru.job4j.soapxml.exception.ServiceException;
 
 import java.io.InputStream;
 
@@ -23,16 +24,15 @@ public class MinioImpl implements Minio {
     }
 
     @Override
-    public byte[] getObject(String objectName) {
+    public byte[] getObject(String objectName) throws ServiceException {
         try (InputStream stream = minioClient.getObject(
                 GetObjectArgs.builder()
                         .bucket(bucketName)
                         .object(objectName)
                         .build())) {
             return IOUtils.toByteArray(stream);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            throw new RuntimeException(ex);
+        } catch (Exception e) {
+            throw new ServiceException("Ошибка MinIo", e);
         }
     }
 }
