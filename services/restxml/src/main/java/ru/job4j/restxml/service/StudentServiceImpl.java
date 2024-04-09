@@ -53,6 +53,8 @@ public class StudentServiceImpl implements StudentService {
             throw new ServiceException("Ошибка при выполнении запроса", e);
         } catch (JsonProcessingException e) {
             throw new ServiceException("Ошибка при конвертации запроса, ответа", e);
+        } catch (Exception e) {
+            throw new ServiceException("Неизвестная ошибка", e);
         }
     }
 
@@ -67,6 +69,8 @@ public class StudentServiceImpl implements StudentService {
             throw new ServiceException("Ошибка при выполнении запроса", e);
         } catch (JsonProcessingException e) {
             throw new ServiceException("Ошибка при конвертации запроса, ответа", e);
+        } catch (Exception e) {
+            throw new ServiceException("Неизвестная ошибка", e);
         }
     }
 

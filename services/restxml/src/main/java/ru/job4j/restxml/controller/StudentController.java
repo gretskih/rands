@@ -3,6 +3,7 @@ package ru.job4j.restxml.controller;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.job4j.restxml.domain.Student;
 import ru.job4j.restxml.exception.ControllerException;
@@ -19,6 +20,7 @@ public class StudentController {
     private final StudentService studentService;
 
     @GetMapping("/{number}")
+    @PreAuthorize("hasAuthority('SCOPE_USER')")
     public ResponseEntity<Student> student(@PathVariable Integer number) throws ControllerException {
         Student student;
         try {
@@ -32,6 +34,7 @@ public class StudentController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('SCOPE_USER')")
     public ResponseEntity<List<Student>> students(@RequestParam("sort") String sortDirection) throws ControllerException {
         List<Student> students;
         try {
@@ -43,4 +46,5 @@ public class StudentController {
                 .status(HttpStatus.OK)
                 .body(students);
     }
+
 }

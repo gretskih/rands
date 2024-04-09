@@ -7,7 +7,8 @@ import ru.job4j.restxml.dto.ErrorMessage;
 import ru.job4j.restxml.exception.ControllerException;
 
 @RestControllerAdvice(
-        assignableTypes = StudentController.class
+        assignableTypes = {StudentController.class,
+                            AccountController.class}
 )
 public class ErrorHandlerController {
 
