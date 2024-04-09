@@ -32,44 +32,34 @@ public class StudentService {
 
     @KafkaListener(id = "server2", topics = "allRequests", concurrency = "10")
     @SendTo
-    public String getAllStudents(String sort) {
+    public String getAllStudents(String sort) throws JsonProcessingException, ServiceException {
         List<Student> list;
-        try {
-            SortDirection sortDirection = xmlMapper.readValue(sort, SortDirection.class);
-            log.info("Find all students sort {}", sortDirection.getValue());
-            if ("DESC".equals(sortDirection.getValue())) {
-                list = studentRepository.findAll(Sort.by(Sort.Direction.DESC, "lastName"));
-            } else {
-                list = studentRepository.findAll(Sort.by(Sort.Direction.ASC, "lastName"));
-            }
-            Type listType = new TypeToken<List<StudentDTO>>() {
-            }.getType();
-            List<StudentDTO> listDTO = modelMapper.map(list, listType);
-            for (int i = 0; i < listDTO.size(); i++) {
-                var arr = minio.getObject(list.get(i).getPhotoTitle());
-                listDTO.get(i).setPhoto(arr);
-            }
-            return xmlMapper.writeValueAsString(listDTO);
-        } catch (ServiceException | JsonProcessingException e) {
-            log.error(e.getCause().getCause().toString(), e);
+        SortDirection sortDirection = xmlMapper.readValue(sort, SortDirection.class);
+        if ("DESC".equals(sortDirection.getValue())) {
+            list = studentRepository.findAll(Sort.by(Sort.Direction.DESC, "lastName"));
+        } else {
+            list = studentRepository.findAll(Sort.by(Sort.Direction.ASC, "lastName"));
         }
-        return null;
+        Type listType = new TypeToken<List<StudentDTO>>() { }.getType();
+        List<StudentDTO> listDTO = modelMapper.map(list, listType);
+        for (int i = 0; i < listDTO.size(); i++) {
+            var arr = minio.getObject(list.get(i).getPhotoTitle());
+            listDTO.get(i).setPhoto(arr);
+        }
+        return xmlMapper.writeValueAsString(listDTO);
     }
 
     @KafkaListener(id = "server1", topics = "oneRequests", concurrency = "10")
     @SendTo
-    public String getOneStudent(String testBookNumber) {
-        try {
-            TestNumberRequestDto testNumberRequestDto = xmlMapper.readValue(testBookNumber, TestNumberRequestDto.class);
-            log.info("Find a student by testbook number {}", testNumberRequestDto.getValue());
-            var student = studentRepository.findByTestBookNumber(testNumberRequestDto.getValue());
-            var studentDTO = modelMapper.map(student, StudentDTO.class);
-            var arr = minio.getObject(student.getPhotoTitle());
-            studentDTO.setPhoto(arr);
-            return xmlMapper.writeValueAsString(studentDTO);
-        } catch (ServiceException | JsonProcessingException e) {
-            log.error(e.getCause().getCause().toString(), e);
+    public String getOneStudent(String testBookNumber) throws ServiceException, JsonProcessingException {
+        TestNumberRequestDto testNumberRequestDto = xmlMapper.readValue(testBookNumber, TestNumberRequestDto.class);
+        var studentOptional = studentRepository.findByTestBookNumber(testNumberRequestDto.getValue());
+        if (studentOptional.isEmpty()) {
+            throw new ServiceException("Студент не найден", new IllegalArgumentException("Not found"));
         }
-        return null;
+        var studentDTO = modelMapper.map(studentOptional.get(), StudentDTO.class);
+        var arr = minio.getObject(studentOptional.get().getPhotoTitle());
+        studentDTO.setPhoto(arr);
+        return xmlMapper.writeValueAsString(studentDTO);
     }
 }

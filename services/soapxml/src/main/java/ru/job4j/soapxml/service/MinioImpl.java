@@ -32,7 +32,7 @@ public class MinioImpl implements Minio {
                         .build())) {
             return IOUtils.toByteArray(stream);
         } catch (Exception e) {
-            throw new ServiceException("Ошибка MinIo", e);
+            throw new ServiceException("Error MinIo", e);
         }
     }
 }

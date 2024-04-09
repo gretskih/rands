@@ -50,10 +50,8 @@ public class StudentServiceImpl implements StudentService {
             String xmlReqMsg = sendAndReceive(oneReplyingKafkaTemplate.sendAndReceive(record), timeoutReceive, TimeUnit.SECONDS);
             return xmlMapper.readValue(xmlReqMsg, Student.class);
         } catch (ExecutionException | InterruptedException | TimeoutException e) {
-            log.error("Ошибка при выполнении запроса", e);
             throw new ServiceException("Ошибка при выполнении запроса", e);
         } catch (JsonProcessingException e) {
-            log.error("Ошибка при конвертации запроса, ответа", e);
             throw new ServiceException("Ошибка при конвертации запроса, ответа", e);
         }
     }
@@ -66,10 +64,8 @@ public class StudentServiceImpl implements StudentService {
             String xmlReqMsg = sendAndReceive(allReplyingKafkaTemplate.sendAndReceive(record), timeoutReceive, TimeUnit.SECONDS);
             return xmlMapper.readValue(xmlReqMsg, new TypeReference<>() { });
         } catch (ExecutionException | InterruptedException | TimeoutException e) {
-            log.error("Ошибка при выполнении запроса", e);
             throw new ServiceException("Ошибка при выполнении запроса", e);
         } catch (JsonProcessingException e) {
-            log.error("Ошибка при конвертации запроса, ответа", e);
             throw new ServiceException("Ошибка при конвертации запроса, ответа", e);
         }
     }

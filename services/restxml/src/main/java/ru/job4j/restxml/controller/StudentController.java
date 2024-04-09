@@ -20,7 +20,7 @@ public class StudentController {
 
     @GetMapping("/{number}")
     public ResponseEntity<Student> student(@PathVariable Integer number) throws ControllerException {
-        Student student = null;
+        Student student;
         try {
             student = studentService.findOneStudent(number);
         } catch (ServiceException e) {
@@ -33,11 +33,11 @@ public class StudentController {
 
     @GetMapping
     public ResponseEntity<List<Student>> students(@RequestParam("sort") String sortDirection) throws ControllerException {
-        List<Student> students = null;
+        List<Student> students;
         try {
             students = studentService.findAllStudents(sortDirection);
         } catch (ServiceException e) {
-            throw new ControllerException("Ошибка", e);
+            throw new ControllerException(e.getMessage(), e);
         }
         return ResponseEntity
                 .status(HttpStatus.OK)
