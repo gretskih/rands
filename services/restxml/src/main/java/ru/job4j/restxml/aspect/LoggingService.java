@@ -23,20 +23,6 @@ public class LoggingService {
     }
 
     /**
-     * Все классы пакет filter
-     */
-    @Pointcut("execution(* ru.job4j.restxml.filter.*.*(..))")
-    public void filterMethodExecuting() {
-    }
-
-    /**
-     * Все классы пакеты filter и service
-     */
-    @Pointcut("serviceMethodExecuting() && filterMethodExecuting()")
-    public void methodExecuting() {
-    }
-
-    /**
      * класс AccountService метод save()
      */
     @Pointcut("execution(* ru.job4j.restxml.service.AccountService.save(..))")
@@ -65,17 +51,10 @@ public class LoggingService {
     }
 
     /**
-     * класс JWTAuthenticationFilter метод attemptAuthentication()
-     */
-    @Pointcut("execution(* ru.job4j.restxml.filter.JWTAuthenticationFilter.attemptAuthentication(..))")
-    public void jwtAuthenticationFilterAttemptAuthentication() {
-    }
-
-    /**
-     * перед запуском любого метода
+     * перед запуском любого метода в пакете service
      * @param joinPoint
      */
-    @Before(value = "methodExecuting()")
+    @Before(value = "serviceMethodExecuting()")
     public void logBefore(JoinPoint joinPoint) {
         log.info("Method execution: {} args={}", joinPoint.getSignature(), Arrays.toString(joinPoint.getArgs()));
     }
@@ -84,7 +63,7 @@ public class LoggingService {
      * после возникновения исключения в пакете service
      * @param e
      */
-    @AfterThrowing(value = "methodExecuting()", throwing = "e")
+    @AfterThrowing(value = "serviceMethodExecuting()", throwing = "e")
     public void logTrow(Exception e) {
         log.error(e.getMessage(), e);
     }
@@ -120,7 +99,7 @@ public class LoggingService {
      * после удачного завершения метода TokenService.generateAccessToken()
      * @param joinPoint
      */
-    @AfterReturning(value = "tokenServiceGenerateAccessToken()", returning = "returningValue")
+    @AfterReturning(value = "tokenServiceGenerateAccessToken()")
     public void logAfter(JoinPoint joinPoint) {
         log.info("The token creation was successful for: {}", Arrays.toString(joinPoint.getArgs()));
     }
